@@ -1,0 +1,86 @@
+
+    '''
+    #Find all unique aa's
+    aaAll = itertools.chain(data[:,0], data[:,1])
+    aaSet = list(set(list(aaAll)))
+    #a =pd.get_dummies(df, prefix=['aa0', 'aa1'])
+    #b = a.values.tolist()
+    '''
+
+    #Encode aa's One Hot
+    '''s = pd.Series(aaSet)
+    aaOneHot = pd.get_dummies(s)
+    print(aaSet)
+    print(aaOneHot)
+    print(aaOneHot[0])
+
+
+    oneHotData = np.array([])'''
+
+    '''for rowNo in range(len(data)):
+        indexOf0 = aaSet.index(data[rowNo][0])
+        indexOf1 = aaSet.index(data[rowNo][1])
+
+        #print(str(data[rowNo][0])+", "+str(data[rowNo][1]))
+        #print(str(indexOf0)+", "+str(indexOf1))
+        #print(data[rowNo])
+        #if rowNo==10:
+        #   break'''
+
+    '''
+    ind1 = anyFeature.index(data[rowNo][0])
+        ind2 = anyFeature.index(data[rowNo][1])
+        if len(encData) == 0:
+            encData = np.array([[newFeatures[ind1], newFeatures[ind2]]])
+        else:
+            encData = np.append(encData, [[newFeatures[ind1], newFeatures[ind2]]], axis=0)
+            # enc.transform(data)
+
+
+
+
+    #print(data)
+    #print(data[:,0])
+    c = itertools.chain(data[:,0], data[:,1])
+    anyFeature = list(set(list(c)))
+    #d = data[:,0]+data[:,1]
+    #anyFeature = list(set(data[:,0]+data[:,1]))
+    #print(anyFeature)
+    #list(le.classes_)
+
+    enc = preprocessing.LabelEncoder()
+    enc.fit(anyFeature)
+    newFeatures = enc.transform(anyFeature)
+    print(anyFeature)
+    print(list(newFeatures))
+    print(data)
+    #print(list(enc.classes_))
+    encData = np.array([])
+    for rowNo in range(len(data)):
+        ind1 = anyFeature.index(data[rowNo][0])
+        ind2 = anyFeature.index(data[rowNo][1])
+        if len(encData)==0:
+            encData = np.array([[newFeatures[ind1],newFeatures[ind2]]])
+        else:
+            encData = np.append(encData, [[newFeatures[ind1],newFeatures[ind2]]],axis = 0)
+    #enc.transform(data)
+
+    print(encData)
+
+    clf = SVC(gamma='auto')
+    clf.fit(encData, labels)
+    #print(list(enc.inverse_transform([1,9])))
+    count=0
+    for i in range(len(label)):
+        if clf.predict([encData[i]]) == [1]:
+           count += 1
+    print(len(label))
+    print(data[0])
+    print(encData[0])
+    print(clf.predict([encData[0]]))
+    #preprocessing.OneHotEncoder()
+
+    s = pd.Series(list('abca'))
+    pd.get_dummies(s)
+
+    '''
