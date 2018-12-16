@@ -122,19 +122,19 @@ def Clf_Split_Data():
 #-----Classifiers and Prediction Parts------#
 
 def Clf_RandomForest(x_train, x_test, y_train):
-    clf = RandomForestClassifier(max_depth=100, n_estimators=100)
+    clf = RandomForestClassifier(max_depth=100, n_estimators=100, max_leaf_nodes=12)
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
 
 def Clf_DecisionTree(x_train, x_test, y_train):
-    clf = tree.DecisionTreeClassifier(max_depth=1000)
+    clf = tree.DecisionTreeClassifier(max_depth=1000, max_leaf_nodes=16)
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
 
 def Clf_LogisticRegression(x_train, x_test, y_train):
-    clf = LogisticRegression(C=0.01, max_iter=1000)
+    clf = LogisticRegression(solver='lbfgs')
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
@@ -143,20 +143,20 @@ def Clf_SVM(x_train, x_test, y_train, kernelType):
     if(kernelType == "rbf"):
         clf = svm.SVC(kernel="rbf", C=1.50, gamma=0.25, max_iter=1000)
     if(kernelType == "linear"):
-        clf = svm.SVC(kernel="linear", C=1, max_iter=1000)
+        clf = svm.SVC(kernel="linear", max_iter=1000, C=0.1)
 
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
 
 def Clf_SGDC(x_train, x_test, y_train):
-    clf = SGDClassifier(alpha=0.001)
+    clf = SGDClassifier(alpha=0.01, max_iter=1000)
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
 
 def Clf_KNN(x_train, x_test, y_train):
-    kNN = KNeighborsClassifier(n_neighbors=5)
+    kNN = KNeighborsClassifier(n_neighbors=13)
     kNN.fit(x_train, y_train)
     y_pred = kNN.predict(x_test)
     return y_pred
@@ -246,23 +246,28 @@ def main():
 
     # y_SVM_preds = Clf_SVM(x_train, x_test, y_train, "rbf")
     # Clf_Report(y_test, y_SVM_preds, "Support Vector Machine - RBF Kernel")
-    # Clf_TPFP(y_SVM_preds, y_test)
+    # # Clf_TPFP(y_SVM_preds, y_test)
 
     # y_SGDC_preds = Clf_SGDC(x_train, x_test, y_train)
     # Clf_Report(y_test, y_SGDC_preds, "Stochastic Gradient Descent Classifier")
-    # Clf_TPFP(y_SGDC_preds, y_test)
+    # #Clf_TPFP(y_SGDC_preds, y_test)
 
-    # y_KNN_preds = Clf_SGDC(x_train, x_test, y_train)
+    # y_LR_preds = Clf_LogisticRegression(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_LR_preds, "Logistic Regression")
+
+    # y_KNN_preds = Clf_KNN(x_train, x_test, y_train)
     # Clf_Report(y_test, y_KNN_preds, "K-Nearest Neighbor")
-    # Clf_TPFP(y_KNN_preds, y_test)
 
-    # y_GNB_preds = Clf_SGDC(x_train, x_test, y_train)
+    # y_GNB_preds = Clf_GaussianNB(x_train, x_test, y_train)
     # Clf_Report(y_test, y_GNB_preds, "Gaussian Naive Bayes")
-    # Clf_TPFP(y_GNB_preds, y_test)
+    # # Clf_TPFP(y_GNB_preds, y_test)
+
+    # y_DT_preds = Clf_DecisionTree(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_DT_preds, "Decision Tree")
 
 
     #shows actual label and predicted label
-    #Clf_CompareLabels(y_SVM_preds, y_test)
+    #Clf_CompareLabels(y_SGDC_preds, y_test)
 
 
 if __name__== "__main__":
