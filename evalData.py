@@ -116,13 +116,38 @@ def predict():
     testPredictions = clf.predict(oneHotDataTest)
 
     # Prediction Statistics
-    countOfCorrects = 0
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+    for rowNo in range(len(labelsTest)):
+        if testPredictions[rowNo] == 1:
+            if labelsTest[rowNo] == 1:
+                TP = TP + 1
+            elif labelsTest[rowNo] == 0:
+                FP = FP + 1
+        elif testPredictions[rowNo] == 0:
+            if labelsTest[rowNo] == 1:
+                FN = FN + 1
+            elif labelsTest[rowNo] == 0:
+                TN = TN + 1
+    # print(predictions)
+
+    acc = (TP + TN) / (TP + TN + FP + FN)
+    precision = (TP) / (TP + FP)
+    recall = (TP) / (TP + FN)
+    print("Accuracy:" + str(acc))
+    print("Precision:" + str(precision))
+    print("Recall:" + str(recall))
+
+    '''countOfCorrects = 0
     for i in range(len(labelsTest)):
         if testPredictions[i] == labelsTest[i]:
             countOfCorrects += 1
 
     predictionAcc = countOfCorrects / sizeOfTest
     print("Prediction Accuracy: " + str(predictionAcc))
+    '''
 
 def main():
     predict()
