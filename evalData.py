@@ -18,7 +18,7 @@ def processData():
     outLabel = np.array([])
 
     #get data from PPData.csv
-    with open('PPData.csv', newline='') as csvfile:
+    with open('Data/PPData.csv', newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
 
         #For each row in file
@@ -42,18 +42,59 @@ def processData():
 
     return outData, outLabel
 
+
+def convertToOneHot(dataInput):
+    df = pd.DataFrame({'A': dataInput[:, 0].tolist(), 'B': dataInput[:, 1].tolist()})
+    dataOutput = np.array(pd.get_dummies(df, prefix=['aa0', 'aa1']).values.tolist())
+    return dataOutput
+
+def addFeatures(labels, inFile):
+    matrixForm = []
+    with open(inFile, newline='') as csvfile:
+        spamreader = csv.reader(csvfile, delimiter=',')
+
+        #For each row in file
+        for row in spamreader:
+            temp = []
+            for colNo in range(0,4):
+                temp.append(row[colNo])
+            matrixForm.append(temp)
+
+    print(matrixForm)
+    n = np.array(matrixForm)
+    indexF = n[:,0]
+
+    outData = np.array([])
+    outLabel = np.array([])
+
+    # For each row in file for left column
+    for row in labels:
+        i1 = indexF.tolist().index(row[0])
+        i2 = indexF.tolist().index(row[1])
+        if len(outLabel) == 0:
+            outData = np.array([matrixForm[i1][1:]+matrixForm[i2][1:]])
+            outLabel = np.array([row])
+        else:
+            outData = np.append(outData, [matrixForm[i1][1:]+matrixForm[i2][1:]], axis=0)
+            outLabel = np.append(outLabel, [row],axis=0)
+
+    return outData, outLabel
+
 def predict():
     data, labels = processData()
 
     # Encode amino acids
-    df = pd.DataFrame({'A': data[:, 0].tolist(), 'B': data[:, 1].tolist()})
-    OneHotData = np.array(pd.get_dummies(df, prefix=['aa0', 'aa1']).values.tolist())
+    oneHotData = convertToOneHot(data)
     # print(OneHotData)
+
+    x,y = addFeatures(data, "Data/Amino Acids Properties.csv")
+
+    oneHotData = np.append(oneHotData,x,axis=1)
 
     # Train and Test Data 80%-20%
     cutterIndex = round(8 * len(labels) / 10)
-    oneHotDataTrain = OneHotData[:cutterIndex]
-    oneHotDataTest = OneHotData[cutterIndex:]
+    oneHotDataTrain = oneHotData[:cutterIndex]
+    oneHotDataTest = oneHotData[cutterIndex:]
     labelsTrain = labels[:cutterIndex]
     labelsTest = labels[cutterIndex:]
     sizeOfTrain = len(labelsTrain)
@@ -85,6 +126,7 @@ def predict():
 
 def main():
     predict()
+
     
 if __name__== "__main__":
     main()
