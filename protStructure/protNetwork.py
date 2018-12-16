@@ -1,9 +1,11 @@
 import numpy as np
 import itertools
 import operator
+import csv
 import random
 import networkx as nx
 from scipy.spatial.distance import pdist, squareform
+from node2vec import Node2Vec
 import sys
 from matplotlib import pyplot as plt
 
@@ -122,19 +124,45 @@ def pdb_to_network(fname, cutoff, chain_id=0, use_cbeta=False):
     chain = coarse_chain(pdb, chain_id)
     coord_key = 'Sidechain' if use_cbeta else 'Backbone'
     points = [residue[coord_key] for residue in chain]
-    return create_network(points, cutoff)
+    return chain,create_network(points, cutoff)
 
+def n2v(gr):
+    node2vec = Node2Vec(gr, dimensions=64, walk_length=30, num_walks=200, workers=1)
 
-n = pdb_to_network('1AKE.pdb', 6.7) # Use first chain, create from Calphas
+    # Embed nodes
+    model = node2vec.fit(window=10, min_count=1,
+                         batch_words=4)  # Any keywords acceptable by gensim.Word2Vec can be passed, `diemnsions` and `workers` are automatically passed (from the Node2Vec constructor)
+
+    # Look for most similar nodes
+    model.wv.most_similar('2')  # Output node names are always strings
+
+    # Save embeddings for later use
+    model.wv.save_word2vec_format("1jm7.emb")
+
+ch,n = pdb_to_network('1jm7.pdb', 6.7) # Use first chain, create from Calphas
 # n = pdb_to_network('1AKE.pdb', 6.7, use_cbeta=True) # Use first chain, create from Cbetas
 # n = pdb_to_network('1AKE.pdb', 6.7, chain_id='B')  # Use chain with name B
 # n = pdb_to_network('1AKE.pdb', 6.7, chain_id=1, use_cbeta=True) # Use second chain (0-index)
 
+n2v(n)
+#nx.write_edgelist(n, "1jm7.edgelist")
+with open('1jm7-R.csv', 'w', newline='') as csvfile:
+    spamwriter = csv.writer(csvfile, delimiter=',', )
+    for resNo in range(len(ch)):
+        l = []
+        l.append(resNo)
+        l.append(ch[resNo]["Name"])
+        l.append(ch[resNo]["No"])
+        spamwriter.writerow(l)
+
+
+
 
 #plt.interactive(True)
-plt.hist(degree(n), bins=range(15))
+#plt.hist(degree(n), bins=range(15))
 #plt.hist(clustering(n), bins=20)
 #plt.hist(knn(n))
 #plt.hist(length(n))
 #plt.hist(spectrum(n), bins=20)
-plt.show()
+#plt.show()
+print("done")
