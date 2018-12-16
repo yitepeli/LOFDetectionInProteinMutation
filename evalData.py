@@ -48,7 +48,7 @@ def convertToOneHot(dataInput):
     dataOutput = np.array(pd.get_dummies(df, prefix=['aa0', 'aa1']).values.tolist())
     return dataOutput
 
-def addFeatures(labels, inFile):
+def addFeatures(labels, inFile, noOfCols):
     matrixForm = []
     with open(inFile, newline='') as csvfile:
         spamreader = csv.reader(csvfile, delimiter=',')
@@ -56,7 +56,7 @@ def addFeatures(labels, inFile):
         #For each row in file
         for row in spamreader:
             temp = []
-            for colNo in range(0,4):
+            for colNo in range(0,noOfCols):
                 temp.append(row[colNo])
             matrixForm.append(temp)
 
@@ -87,9 +87,9 @@ def predict():
     oneHotData = convertToOneHot(data)
     # print(OneHotData)
 
-    x,y = addFeatures(data, "Data/Amino Acids Properties.csv")
+    x,y = addFeatures(data, "Data/Amino Acids Properties.csv",4)
 
-    oneHotData = np.append(oneHotData,x,axis=1)
+    #oneHotData = np.append(oneHotData,x,axis=1)
 
     # Train and Test Data 80%-20%
     cutterIndex = round(8 * len(labels) / 10)
@@ -136,9 +136,11 @@ def predict():
     acc = (TP + TN) / (TP + TN + FP + FN)
     precision = (TP) / (TP + FP)
     recall = (TP) / (TP + FN)
+    F1 = 2*precision*recall/(precision+recall)
     print("Accuracy:" + str(acc))
     print("Precision:" + str(precision))
     print("Recall:" + str(recall))
+    print("F1 Measure:" + str(F1))
 
     '''countOfCorrects = 0
     for i in range(len(labelsTest)):
