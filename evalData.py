@@ -3,15 +3,28 @@
 Created on Wed Dec  5 21:42:39 2018
 
 @author: yitepeli
+@author: omeerkorkmazz
 """
 
 import csv
 import numpy as np
 from sklearn.svm import SVC
+import sklearn.naive_bayes as nb
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import SGDClassifier, LogisticRegression
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn import svm, tree
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import cross_val_score
+from sklearn.model_selection import GridSearchCV
 from sklearn import preprocessing
 import itertools
 import pandas as pd
 
+
+
+#-----Data Processing Parts------#
 
 def processData():
     outData = np.array([])
@@ -41,7 +54,6 @@ def processData():
                 outLabel = np.append(outLabel, [labelVal])
 
     return outData, outLabel
-
 
 def convertToOneHot(dataInput):
     df = pd.DataFrame({'A': dataInput[:, 0].tolist(), 'B': dataInput[:, 1].tolist()})
@@ -80,26 +92,94 @@ def addFeatures(labels, inFile, noOfCols):
 
     return outData, outLabel
 
-def predict():
+def Clf_Split_Data():
     data, labels = processData()
 
     # Encode amino acids
     oneHotData = convertToOneHot(data)
     # print(OneHotData)
 
-    x,y = addFeatures(data, "Data/Amino Acids Properties.csv",4)
-
+    x, y = addFeatures(data, "Data/Amino Acids Properties.csv", 4)
     #oneHotData = np.append(oneHotData,x,axis=1)
 
-    # Train and Test Data 80%-20%
-    cutterIndex = round(8 * len(labels) / 10)
-    oneHotDataTrain = oneHotData[:cutterIndex]
-    oneHotDataTest = oneHotData[cutterIndex:]
-    labelsTrain = labels[:cutterIndex]
-    labelsTest = labels[cutterIndex:]
-    sizeOfTrain = len(labelsTrain)
-    sizeOfTest = len(labelsTest)
+    #data split operation based on stratified labels. %80 train %20 test (rate could be changeable)
+    oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.20, random_state=50)
 
+    # Train and Test Data 80%-20%
+    # cutterIndex = round(8 * len(labels) / 10)
+    # oneHotDataTrain = oneHotData[:cutterIndex]
+    # oneHotDataTest = oneHotData[cutterIndex:]
+    # labelsTrain = labels[:cutterIndex]
+    # labelsTest = labels[cutterIndex:]
+    # sizeOfTrain = len(labelsTrain)
+    # sizeOfTest = len(labelsTest)
+
+    return oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest
+
+
+
+
+#-----Classifiers and Prediction Parts------#
+
+def Clf_RandomForest(x_train, x_test, y_train):
+    clf = RandomForestClassifier(max_depth=100, n_estimators=100)
+    clf.fit(x_train, y_train)
+    y_preds = clf.predict(x_test)
+    return y_preds
+
+def Clf_DecisionTree(x_train, x_test, y_train):
+    clf = tree.DecisionTreeClassifier(max_depth=1000)
+    clf.fit(x_train, y_train)
+    y_preds = clf.predict(x_test)
+    return y_preds
+
+def Clf_LogisticRegression(x_train, x_test, y_train):
+    clf = LogisticRegression(C=0.01, max_iter=1000)
+    clf.fit(x_train, y_train)
+    y_preds = clf.predict(x_test)
+    return y_preds
+
+def Clf_SVM(x_train, x_test, y_train, kernelType):
+    if(kernelType == "rbf"):
+        clf = svm.SVC(kernel="rbf", C=1.50, gamma=0.25, max_iter=1000)
+    if(kernelType == "linear"):
+        clf = svm.SVC(kernel="linear", C=1, max_iter=1000)
+
+    clf.fit(x_train, y_train)
+    y_preds = clf.predict(x_test)
+    return y_preds
+
+def Clf_SGDC(x_train, x_test, y_train):
+    clf = SGDClassifier(alpha=0.001)
+    clf.fit(x_train, y_train)
+    y_preds = clf.predict(x_test)
+    return y_preds
+
+def Clf_KNN(x_train, x_test, y_train):
+    kNN = KNeighborsClassifier(n_neighbors=5)
+    kNN.fit(x_train, y_train)
+    y_pred = kNN.predict(x_test)
+    return y_pred
+
+def Clf_GaussianNB(x_train, x_test, y_train):
+    clf = nb.GaussianNB()
+    clf.fit(x_train, y_train)
+    y_pred = clf.predict(x_test)
+    return y_pred
+
+
+
+
+#-----Report and Accuracy Parts------#
+
+def Clf_Report(y_test, y_pred, algorithmName):
+    accuracyScore = accuracy_score(y_test, y_pred)
+    print("---------------------TEST RESULTS---------------------\n")
+    print("       Classifier : ", algorithmName)
+    print("       Accuracy   : ", accuracyScore*100, "\n")
+    print(classification_report(y_test, y_pred))
+
+def Clf_BaseAccuracy(labelsTest, sizeOfTest):
     # Calculate Base Accuracy
     countOfLoss = 0
     for row in labelsTest:
@@ -108,13 +188,7 @@ def predict():
     baseAcc = max(countOfLoss, sizeOfTest - countOfLoss) / sizeOfTest
     print("Base Accuracy: " + str(baseAcc))
 
-    # Create SVM Model
-    clf = SVC(gamma='auto')
-    clf.fit(oneHotDataTrain, labelsTrain)
-
-    # Predict
-    testPredictions = clf.predict(oneHotDataTest)
-
+def Clf_TPFP(testPredictions, labelsTest):
     # Prediction Statistics
     TP = 0
     TN = 0
@@ -136,11 +210,11 @@ def predict():
     acc = (TP + TN) / (TP + TN + FP + FN)
     precision = (TP) / (TP + FP)
     recall = (TP) / (TP + FN)
-    F1 = 2*precision*recall/(precision+recall)
-    print("Accuracy:" + str(acc))
-    print("Precision:" + str(precision))
-    print("Recall:" + str(recall))
-    print("F1 Measure:" + str(F1))
+    F1 = 2 * precision * recall / (precision + recall)
+    print("Accuracy: " + str(acc * 100))
+    print("Precision: " + str(precision * 100))
+    print("Recall: " + str(recall * 100))
+    print("F1 Measure: " + str(F1 * 100))
 
     '''countOfCorrects = 0
     for i in range(len(labelsTest)):
@@ -151,9 +225,45 @@ def predict():
     print("Prediction Accuracy: " + str(predictionAcc))
     '''
 
-def main():
-    predict()
+def Clf_CompareLabels(y_preds, y_test):
+    print("\n---------COMPARING LABELS---------\n")
+    for i in range(0, len(y_test)):
+        print("predict --> ", y_preds[i], "actual -->", y_test[i])
 
-    
+
+
+
+#-----Main Parts------#
+def main():
+    #split and get train and test features and labels
+    x_train, x_test, y_train, y_test = Clf_Split_Data()
+
+    # y_RF_preds = Clf_RandomForest(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_RF_preds, "Random Forest")
+
+    # y_SVM_preds = Clf_SVM(x_train, x_test, y_train, "linear")
+    # Clf_Report(y_test, y_SVM_preds, "Support Vector Machine - Linear Kernel")
+
+    # y_SVM_preds = Clf_SVM(x_train, x_test, y_train, "rbf")
+    # Clf_Report(y_test, y_SVM_preds, "Support Vector Machine - RBF Kernel")
+    # Clf_TPFP(y_SVM_preds, y_test)
+
+    # y_SGDC_preds = Clf_SGDC(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_SGDC_preds, "Stochastic Gradient Descent Classifier")
+    # Clf_TPFP(y_SGDC_preds, y_test)
+
+    # y_KNN_preds = Clf_SGDC(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_KNN_preds, "K-Nearest Neighbor")
+    # Clf_TPFP(y_KNN_preds, y_test)
+
+    # y_GNB_preds = Clf_SGDC(x_train, x_test, y_train)
+    # Clf_Report(y_test, y_GNB_preds, "Gaussian Naive Bayes")
+    # Clf_TPFP(y_GNB_preds, y_test)
+
+
+    #shows actual label and predicted label
+    #Clf_CompareLabels(y_SVM_preds, y_test)
+
+
 if __name__== "__main__":
     main()
