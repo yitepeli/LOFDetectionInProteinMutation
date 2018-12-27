@@ -21,7 +21,7 @@ KEYS= [['K','A'],['L','B'],['M','C'],['N','D'],['O','E'],['P','F'],['Q','G']]
 
 def main():
     
-    mainWB = load_workbook('PPData.xlsx')
+    mainWB = load_workbook('Data/PPData.xlsx')
     #print(mainWB.sheetnames)
     mainS = mainWB.active
     #if mainS['K'][6].value != "NA":

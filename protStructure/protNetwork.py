@@ -71,7 +71,10 @@ def coarse_chain(pdb, chain_id=0):
                 break
     coarse = []
     for residue in chain['Residues']:
-        sidechain_no = 4 if residue['Name'] != 'GLY' else 1
+        sidechain_no = 4 if residue['Name'] != 'GLY' and (len(residue["Atoms"]) >5) else 1
+        #if len(residue["Atoms"])<4 and residue['Name'] != 'GLY':
+        print( len(residue["Atoms"]))
+        print(sidechain_no)
         coarse.append(
             {'Backbone': (residue['Atoms'][1]['x'],
                      residue['Atoms'][1]['y'],
@@ -137,16 +140,19 @@ def n2v(gr):
     model.wv.most_similar('2')  # Output node names are always strings
 
     # Save embeddings for later use
-    model.wv.save_word2vec_format("1jm7.emb")
+    model.wv.save_word2vec_format("1t29.emb")
 
-ch,n = pdb_to_network('1jm7.pdb', 6.7) # Use first chain, create from Calphas
+ch,n = pdb_to_network('1t29.pdb', 6.7) # Use first chain, create from Calphas
 # n = pdb_to_network('1AKE.pdb', 6.7, use_cbeta=True) # Use first chain, create from Cbetas
 # n = pdb_to_network('1AKE.pdb', 6.7, chain_id='B')  # Use chain with name B
 # n = pdb_to_network('1AKE.pdb', 6.7, chain_id=1, use_cbeta=True) # Use second chain (0-index)
 
+nx.draw(n)
+plt.show()
+
 n2v(n)
-#nx.write_edgelist(n, "1jm7.edgelist")
-with open('1jm7-R.csv', 'w', newline='') as csvfile:
+nx.write_edgelist(n, "1t29.edgelist")
+with open('1t29-R.csv', 'w', newline='') as csvfile:
     spamwriter = csv.writer(csvfile, delimiter=',', )
     for resNo in range(len(ch)):
         l = []
