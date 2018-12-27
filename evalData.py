@@ -22,6 +22,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import cross_val_score
 from sklearn.model_selection import GridSearchCV
 from sklearn import preprocessing
+import blossomProcessor as bloPro
 
 
 def processData():
@@ -80,6 +81,8 @@ def addFeatures(labels, inFile, noOfCols):
                 temp.append(row[colNo])
             matrixForm.append(temp)
 
+
+
     matrixForm = matrixForm[1:][:]
     for row in matrixForm:
         for colNo in range(1,len(row)):
@@ -114,6 +117,84 @@ def addFeatures(labels, inFile, noOfCols):
 
     return outData, outLabel
 
+def getBlossomData(aaLabels):
+    blossomDataList, blossomDataScore = bloPro.processData()
+
+
+    ScoreOutData = np.array([])
+    for row in aaLabels:
+        ind1 = blossomDataList.index(row[0])
+        ind2 = blossomDataList.index(row[1])
+
+
+        if len(ScoreOutData) == 0:
+            ScoreOutData = np.array([[blossomDataScore[ind1][ind2]]])
+        else:
+            ScoreOutData = np.append(ScoreOutData, [[blossomDataScore[ind1][ind2]]], axis=0)
+
+    return ScoreOutData
+
+#-----Report and Accuracy Parts------#
+
+
+def Clf_Report(y_test, y_pred, algorithmName):
+    accuracyScore = accuracy_score(y_test, y_pred)
+    print("---------------------TEST RESULTS---------------------\n")
+    print("       Classifier : ", algorithmName)
+    print("       Accuracy   : ", accuracyScore*100, "\n")
+    print(classification_report(y_test, y_pred))
+
+def Clf_BaseAccuracy(labelsTest):
+    # Calculate Base Accuracy
+    countOfLoss = 0
+    sizeOfTest = len(labelsTest)
+    for row in labelsTest:
+        if row == 1:
+            countOfLoss += 1
+    baseAcc = max(countOfLoss, sizeOfTest - countOfLoss) / sizeOfTest
+    print("Base Accuracy: " + str(baseAcc))
+
+def Clf_TPFP(testPredictions, labelsTest):
+    # Prediction Statistics
+    TP = 0
+    TN = 0
+    FP = 0
+    FN = 0
+    for rowNo in range(len(labelsTest)):
+        if testPredictions[rowNo] == 1:
+            if labelsTest[rowNo] == 1:
+                TP = TP + 1
+            elif labelsTest[rowNo] == 0:
+                FP = FP + 1
+        elif testPredictions[rowNo] == 0:
+            if labelsTest[rowNo] == 1:
+                FN = FN + 1
+            elif labelsTest[rowNo] == 0:
+                TN = TN + 1
+    # print(predictions)
+
+    acc = (TP + TN) / (TP + TN + FP + FN)
+    precision = (TP) / (TP + FP)
+    recall = (TP) / (TP + FN)
+    F1 = 2 * precision * recall / (precision + recall)
+    print("Accuracy: " + str(acc * 100))
+    print("Precision: " + str(precision * 100))
+    print("Recall: " + str(recall * 100))
+    print("F1 Measure: " + str(F1 * 100))
+
+    '''countOfCorrects = 0
+    for i in range(len(labelsTest)):
+        if testPredictions[i] == labelsTest[i]:
+            countOfCorrects += 1
+    predictionAcc = countOfCorrects / sizeOfTest
+    print("Prediction Accuracy: " + str(predictionAcc))
+    '''
+
+def Clf_CompareLabels(y_preds, y_test):
+    print("\n---------COMPARING LABELS---------\n")
+    for i in range(0, len(y_test)):
+        print("predict --> ", y_preds[i], "actual -->", y_test[i])
+
 def Clf_Split_Data():
     data, labels = processData()
 
@@ -122,7 +203,7 @@ def Clf_Split_Data():
     # print(OneHotData)
 
     x, y = addFeatures(data, "Data/Amino Acids Properties.csv", 4)
-    oneHotData = np.append(oneHotData,x,axis=1)
+    oneHotData = np.append(oneHotData, x, axis=1)
 
     #data split operation based on stratified labels. %80 train %20 test (rate could be changeable)
     oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.20, random_state=50)
@@ -185,71 +266,6 @@ def Clf_GaussianNB(x_train, x_test, y_train):
     return y_pred
 
 
-
-
-#-----Report and Accuracy Parts------#
-
-def Clf_Report(y_test, y_pred, algorithmName):
-    accuracyScore = accuracy_score(y_test, y_pred)
-    print("---------------------TEST RESULTS---------------------\n")
-    print("       Classifier : ", algorithmName)
-    print("       Accuracy   : ", accuracyScore*100, "\n")
-    print(classification_report(y_test, y_pred))
-
-def Clf_BaseAccuracy(labelsTest):
-    # Calculate Base Accuracy
-    countOfLoss = 0
-    sizeOfTest = len(labelsTest)
-    for row in labelsTest:
-        if row == 1:
-            countOfLoss += 1
-    baseAcc = max(countOfLoss, sizeOfTest - countOfLoss) / sizeOfTest
-    print("Base Accuracy: " + str(baseAcc))
-
-def Clf_TPFP(testPredictions, labelsTest):
-    # Prediction Statistics
-    TP = 0
-    TN = 0
-    FP = 0
-    FN = 0
-    for rowNo in range(len(labelsTest)):
-        if testPredictions[rowNo] == 1:
-            if labelsTest[rowNo] == 1:
-                TP = TP + 1
-            elif labelsTest[rowNo] == 0:
-                FP = FP + 1
-        elif testPredictions[rowNo] == 0:
-            if labelsTest[rowNo] == 1:
-                FN = FN + 1
-            elif labelsTest[rowNo] == 0:
-                TN = TN + 1
-    # print(predictions)
-
-    acc = (TP + TN) / (TP + TN + FP + FN)
-    precision = (TP) / (TP + FP)
-    recall = (TP) / (TP + FN)
-    F1 = 2 * precision * recall / (precision + recall)
-    print("Accuracy: " + str(acc * 100))
-    print("Precision: " + str(precision * 100))
-    print("Recall: " + str(recall * 100))
-    print("F1 Measure: " + str(F1 * 100))
-
-    '''countOfCorrects = 0
-    for i in range(len(labelsTest)):
-        if testPredictions[i] == labelsTest[i]:
-            countOfCorrects += 1
-    predictionAcc = countOfCorrects / sizeOfTest
-    print("Prediction Accuracy: " + str(predictionAcc))
-    '''
-
-def Clf_CompareLabels(y_preds, y_test):
-    print("\n---------COMPARING LABELS---------\n")
-    for i in range(0, len(y_test)):
-        print("predict --> ", y_preds[i], "actual -->", y_test[i])
-
-
-
-
 #-----Main Parts------#
 '''def main():
     #split and get train and test features and labels
@@ -290,9 +306,10 @@ def predict():
     oneHotData = convertToOneHot(data)
     # print(OneHotData)
 
-    # x,y = addFeatures(data, "Data/Amino Acids Properties.csv",4)
+    x,y = addFeatures(data, "Data/Amino Acids Properties.csv",4)
+    blosData = getBlossomData(data)
 
-    oneHotData = np.append(oneHotData,x,axis=1)
+    oneHotData = np.append(oneHotData, blosData, axis=1)
 
     # Train and Test Data 80%-20%
     '''cutterIndex = round(8 * len(labels) / 10)
