@@ -3,6 +3,7 @@
 Created on Wed Dec  5 21:42:39 2018
 
 @author: yitepeli
+@author: omeerkorkmazz
 """
 
 import csv
@@ -13,6 +14,8 @@ from sklearn.model_selection import train_test_split
 import blossomProcessor as bloPro
 import classification
 import evaluation
+from sklearn import svm, tree
+from sklearn.neighbors import KNeighborsClassifier
 
 
 def processData():
@@ -85,7 +88,7 @@ def addFeatures(labels, inFile, noOfCols):
         for colNo in range(1,len(row)):
             row[colNo] = (float(row[colNo])-normMin[colNo-1])/(normMax[colNo-1]-normMin[colNo-1])
 
-    print(matrixForm)
+    #print(matrixForm)
     n = np.array(matrixForm)
     indexF = n[:,0]
 
@@ -134,7 +137,7 @@ def Clf_Split_Data():
     # print(OneHotData)
 
     #Get extra features
-    x,y = addFeatures(data, "Data/Amino Acids Properties.csv",4)
+    x, y = addFeatures(data, "Data/Amino Acids Properties.csv", 4)
     blosData = getBlossomData(data)
 
     #Add extra features
@@ -151,11 +154,28 @@ def predict():
     #split Train, Test Data
     oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = Clf_Split_Data()
 
-    #Use Model
-    testPredictions = classification.Clf_SVM(oneHotDataTrain, oneHotDataTest, labelsTrain, "rbf")
+    #---Use Model---#
+    #testPredictions = classification.Clf_SVM(oneHotDataTrain, oneHotDataTest, labelsTrain, "rbf")
+    #testPredictions = classification.Clf_XGBoost(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_DecisionTree(oneHotDataTrain, oneHotDataTest, labelsTrain)
 
-    #Report
-    evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
+    #---Report---#
+    #evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
+    evaluation.Clf_Report(labelsTest, testPredictions, "DecisionTree")
+
+    evaluation.Clf_TPFP(labelsTest, testPredictions)
+    #evaluation.Clf_CompareLabels(labelsTest, testPredictions)
+
+
+    #---Validation---#
+    #evaluation.CrossVal(oneHotDataTrain, labelsTrain)
+    #evaluation.Learning_Curve(svm.SVC(kernel="rbf", gamma=0.25, C=1.75), oneHotDataTrain, labelsTrain)
+    #evaluation.Learning_Curve(tree.DecisionTreeClassifier(max_depth=1000), oneHotDataTrain, labelsTrain, 'Decision Tree')
+    #evaluation.Validation_Curve(oneHotDataTrain, labelsTrain)
+
+    #evaluation.KNN_Validation(oneHotDataTrain, labelsTrain)
+    evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=31), oneHotDataTrain, labelsTrain, 'KNN')
 
 def main():
     predict()
