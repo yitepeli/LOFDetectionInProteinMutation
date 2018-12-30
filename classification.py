@@ -25,7 +25,7 @@ def Clf_LogisticRegression(x_train, x_test, y_train):
 
 def Clf_SVM(x_train, x_test, y_train, kernelType):
     if(kernelType == "rbf"):
-        clf = svm.SVC(kernel="rbf", gamma=0.25, C=1.75)
+        clf = svm.SVC(kernel="rbf", gamma=1, C=1)
     if(kernelType == "linear"):
         clf = svm.SVC(kernel="linear", C=0.1, max_iter=1000)
 
@@ -52,7 +52,7 @@ def Clf_GaussianNB(x_train, x_test, y_train):
     return y_pred
 
 def Clf_XGBoost(x_train, x_test, y_train):
-    clf = GradientBoostingClassifier(learning_rate=1.5, n_estimators=1000)
+    clf = GradientBoostingClassifier(learning_rate=1.50, n_estimators=1000)
     clf.fit(x_train, y_train)
     y_pred = clf.predict(x_test)
     return y_pred

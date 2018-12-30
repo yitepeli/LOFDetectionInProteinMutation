@@ -11,7 +11,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import cross_val_score
-
+from sklearn import metrics
+from sklearn.metrics import roc_auc_score
+from sklearn.utils.fixes import signature
 
 def Clf_Report(y_test, y_pred, algorithmName):
     accuracyScore = accuracy_score(y_test, y_pred)
@@ -73,9 +75,9 @@ def Clf_CompareLabels(y_preds, y_test):
 
 
 
-def CrossVal(x_train, y_train):
-    C_range = np.logspace(-2, 2, 3)
-    gamma_range = np.logspace(-9, 3, 3)
+def Tune_SVM_Parameters(x_train, y_train):
+    C_range = [0.001, 0.01, 0.1, 1, 10]
+    gamma_range = [0.001, 0.01, 0.1, 1, 10]
     param_grid = dict(gamma=gamma_range, C=C_range)
     grid = GridSearchCV(svm.SVC(kernel="rbf"), param_grid=param_grid, cv=5)
     grid.fit(x_train, y_train)
@@ -83,9 +85,20 @@ def CrossVal(x_train, y_train):
     print("The best parameters are %s with a score of %0.2f"
           % (grid.best_params_, grid.best_score_))
 
+def Tune_XGBoost_Parameters(x_train, y_train):
+    LR_range = [0.001, 0.01, 0.1, 1, 10, 100]
+    estimators_range = [100, 1000, 2000, 3000]
+    param_grid = dict(n_estimators=estimators_range, learning_rate=LR_range)
+    grid = GridSearchCV(GradientBoostingClassifier(), param_grid=param_grid, cv=5)
+    grid.fit(x_train, y_train)
+
+    print("The best parameters are %s with a score of %0.2f"
+          % (grid.best_params_, grid.best_score_))
+
+
 
 def Learning_Curve(clf, x_train, y_train, clfName):
-    train_sizes, train_scores, valid_scores = learning_curve(clf, x_train, y_train, train_sizes=[250, 500, 750, 1000, 1250, 1500, 1750], cv=5, n_jobs=1, scoring="accuracy")
+    train_sizes, train_scores, valid_scores = learning_curve(clf, x_train, y_train, train_sizes=[500, 1000, 1494], scoring="accuracy")
     plt.title("Learning Curve - " + clfName)
     plt.plot(train_sizes, train_scores, label="Training Score")
     plt.plot(train_sizes, valid_scores, label="Cross Validation Score", linewidth=2.0, linestyle='dashed')
@@ -93,7 +106,6 @@ def Learning_Curve(clf, x_train, y_train, clfName):
     plt.ylabel("Score")
     plt.legend()
     plt.show()
-
 
 def Validation_Curve(x_train, y_train):
     train_scores, valid_scores = validation_curve(svm.SVC(), x_train, y_train, param_name="C", param_range=np.logspace(-6, 2, 5), cv=5, scoring="accuracy", n_jobs=1)
@@ -120,10 +132,6 @@ def Validation_Curve(x_train, y_train):
     plt.legend(loc="best")
     plt.show()
 
-
-
-
-
 def KNN_Validation(x_train, y_train):
     x_values = [1, 2, 3, 4, 5]
     neighborValues = []
@@ -145,4 +153,65 @@ def KNN_Validation(x_train, y_train):
     plt.xlabel("Neighbors")
     plt.ylabel("Average Score of Cross Validation")
     plt.plot(neighborValues, averageCV)
+    plt.show()
+
+
+
+def AUC_Score(y_test,  y_preds):
+    fpr, tpr, thresholds = metrics.roc_curve(y_test, y_preds)
+    score = metrics.auc(fpr, tpr)
+    print("AUC Score --->", score * 100)
+
+def Average_Precision_Score(y_test,  y_preds):
+    score = metrics.average_precision_score(y_test, y_preds, average="macro")
+    print("Average Precision Score --->", score * 100)
+
+def Precision_Recall_Curve(y_test, y_score):
+    precision, recall, _ = metrics.precision_recall_curve(y_test, y_score)
+
+    # In matplotlib < 1.5, plt.fill_between does not have a 'step' argument
+    step_kwargs = ({'step': 'post'}
+                   if 'step' in signature(plt.fill_between).parameters
+                   else {})
+    plt.step(recall, precision, color='b', alpha=0.2,
+             where='post')
+    plt.fill_between(recall, precision, alpha=0.2, color='b', **step_kwargs)
+
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.ylim([0.0, 1.05])
+    plt.xlim([0.0, 1.0])
+    plt.title('2-class Precision-Recall curve: AP={0:0.2f}'.format(
+        metrics.average_precision_score(y_test, y_score)))
+    plt.show()
+
+def F1_Score(y_test, y_score):
+    score= metrics.f1_score(y_test, y_score)
+    print("F1 Score --->", score * 100)
+
+
+def Compare_Classifiers(X, y):
+    models = []
+    #models.append(('LR', LogisticRegression(C=0.01, max_iter=1000)))
+    models.append(('KNN', KNeighborsClassifier(n_neighbors=31)))
+    models.append(('Decision Tree', tree.DecisionTreeClassifier(max_depth=1000, max_leaf_nodes=10)))
+    models.append(('Random Forest', RandomForestClassifier(max_depth=100, n_estimators=100)))
+    models.append(('SVM-Rbf', svm.SVC(kernel="rbf", gamma=1, C=1)))
+    models.append(('SVM-Linear', svm.SVC(kernel="linear", C=0.1, max_iter=1000)))
+    # evaluate each model in turn
+    results = []
+    names = []
+    scoring = 'accuracy'
+    for name, model in models:
+        cv_results = cross_val_score(model, X, y, scoring=scoring)
+        results.append(cv_results)
+        names.append(name)
+        msg = "%s: %f (%f)" % (name, cv_results.mean(), cv_results.std())
+        print(msg)
+    # boxplot algorithm comparison
+    fig = plt.figure()
+    fig.suptitle('Classifiers Comparison')
+    ax = fig.add_subplot(111)
+    plt.boxplot(results)
+    ax.set_xticklabels(names)
     plt.show()

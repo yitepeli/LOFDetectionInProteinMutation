@@ -143,8 +143,8 @@ def Clf_Split_Data():
     #Add extra features
     oneHotData = np.append(oneHotData, blosData, axis=1)
 
-    #data split operation based on stratified labels. %80 train %20 test (rate could be changeable)
-    oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.20, random_state=50)
+    #data split operation based on stratified labels. %90 train %10 test (rate could be changeable)
+    oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.1)
 
     return oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest
 
@@ -156,26 +156,37 @@ def predict():
 
     #---Use Model---#
     #testPredictions = classification.Clf_SVM(oneHotDataTrain, oneHotDataTest, labelsTrain, "rbf")
-    #testPredictions = classification.Clf_XGBoost(oneHotDataTrain, oneHotDataTest, labelsTrain)
-    testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    testPredictions = classification.Clf_XGBoost(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_DecisionTree(oneHotDataTrain, oneHotDataTest, labelsTrain)
 
     #---Report---#
+    evaluation.Clf_Report(labelsTest, testPredictions, "XGBoost")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "DecisionTree")
     #evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
-    evaluation.Clf_Report(labelsTest, testPredictions, "DecisionTree")
 
     evaluation.Clf_TPFP(labelsTest, testPredictions)
     #evaluation.Clf_CompareLabels(labelsTest, testPredictions)
 
 
     #---Validation---#
-    #evaluation.CrossVal(oneHotDataTrain, labelsTrain)
-    #evaluation.Learning_Curve(svm.SVC(kernel="rbf", gamma=0.25, C=1.75), oneHotDataTrain, labelsTrain)
+    #evaluation.Learning_Curve(svm.SVC(kernel="rbf", gamma=0.1, C=1), oneHotDataTrain, labelsTrain, "SVM")
     #evaluation.Learning_Curve(tree.DecisionTreeClassifier(max_depth=1000), oneHotDataTrain, labelsTrain, 'Decision Tree')
     #evaluation.Validation_Curve(oneHotDataTrain, labelsTrain)
 
     #evaluation.KNN_Validation(oneHotDataTrain, labelsTrain)
-    evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=31), oneHotDataTrain, labelsTrain, 'KNN')
+    #evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=31), oneHotDataTrain, labelsTrain, 'KNN')
+
+
+    print("\n------- METRICS -------")
+    evaluation.AUC_Score(labelsTest, testPredictions)
+    evaluation.Average_Precision_Score(labelsTest, testPredictions)
+    evaluation.F1_Score(labelsTest, testPredictions)
+    #evaluation.Precision_Recall_Curve(labelsTest, testPredictions)
+    #evaluation.Tune_SVM_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_XGBoost_Parameters(oneHotDataTrain, labelsTrain)
+    evaluation.Compare_Classifiers(oneHotDataTrain, labelsTrain)
+
 
 def main():
     predict()
