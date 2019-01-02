@@ -21,6 +21,7 @@ from sklearn.neighbors import KNeighborsClassifier
 def processData():
     outData = np.array([])
     outLabel = np.array([])
+    outSequence = np.array([])
 
     #get data from PPData.csv
     with open('Data/PPData.csv', newline='') as csvfile:
@@ -39,9 +40,11 @@ def processData():
             if row[2] == "*":
                 data2Val = "X"
             if len(outLabel) == 0:
+                outSequence = np.array([row[0]])
                 outData = np.array([[row[1], data2Val]])
                 outLabel = np.array([labelVal])
             else:
+                outSequence = np.append(outSequence, [row[0]])
                 outData = np.append(outData, [[row[1], data2Val]], axis=0)
                 outLabel = np.append(outLabel, [labelVal])
 
@@ -51,7 +54,7 @@ def processData():
     a2 = np.array(a2)
     b2 = c[:, outData.size // len(outData):].reshape(outLabel.shape)
     b2 = np.array(b2)
-    return outData, outLabel
+    return outSequence, outData, outLabel
 
 
 def convertToOneHot(dataInput):
@@ -128,20 +131,70 @@ def getBlossomData(aaLabels):
     return ScoreOutData
 
 
+def getAATableData(aaLabels):
+    aaDataList, aaDataScore = bloPro.processDataAATable()
+
+
+    out1 = np.array([])
+    out2 = np.array([])
+    for row in aaLabels:
+        ind1 = aaDataList.index(row[0])
+        ind2 = aaDataList.index(row[1])
+
+        if len(out1) == 0:
+            out1 = np.array([aaDataScore[ind1]])
+            out2 = np.array([aaDataScore[ind2]])
+        else:
+            out1 = np.append(out1, [aaDataScore[ind1]], axis=0)
+            out2 = np.append(out2, [aaDataScore[ind2]], axis=0)
+
+    return out1, out2
+
+def getEmbeddings(seq,structName):
+    sequence, features = bloPro.processDataEmbeddings(structName)
+
+    out1 = np.array([])
+    for row in seq:
+        if row not in sequence:
+            tempArr = [0]*len(features[0])
+            out1 = np.append(out1, [tempArr], axis=0)
+        else:
+            ind1 = sequence.index(row)
+
+            if len(out1) == 0:
+                out1 = np.array([features[ind1]])
+            else:
+                out1 = np.append(out1, [features[ind1]], axis=0)
+
+    return out1
+
+
 def Clf_Split_Data():
     #Get processed data
-    data, labels = processData()
+    sequence, data, labels = processData()
 
     # Encode amino acids
-    oneHotData = convertToOneHot(data)
+    #oneHotData = convertToOneHot(data)
+    oneHotData = data
     # print(OneHotData)
 
     #Get extra features
     x, y = addFeatures(data, "Data/Amino Acids Properties.csv", 4)
     blosData = getBlossomData(data)
+    aaData1,aaData2 = getAATableData(data)
+    node2vecFeatures1 = getEmbeddings(sequence,"1jm7")
+    node2vecFeatures2 = getEmbeddings(sequence,"1t29")
 
     #Add extra features
     oneHotData = np.append(oneHotData, blosData, axis=1)
+    oneHotData = np.append(oneHotData, aaData1, axis=1)
+    oneHotData = np.append(oneHotData, aaData2, axis=1)
+    oneHotData = np.append(oneHotData, node2vecFeatures1, axis=1)
+    oneHotData = np.append(oneHotData, node2vecFeatures2, axis=1)
+
+    #Removing actual aa's
+    oneHotData = np.delete(oneHotData, 0, 1)
+    oneHotData = np.delete(oneHotData, 0, 1)
 
     #data split operation based on stratified labels. %90 train %10 test (rate could be changeable)
     oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.1)
