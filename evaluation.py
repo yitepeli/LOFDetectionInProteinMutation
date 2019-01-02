@@ -76,8 +76,8 @@ def Clf_CompareLabels(y_preds, y_test):
 
 
 def Tune_SVM_Parameters(x_train, y_train):
-    C_range = [0.001, 0.01, 0.1, 1, 10]
-    gamma_range = [0.001, 0.01, 0.1, 1, 10]
+    C_range = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    gamma_range = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
     param_grid = dict(gamma=gamma_range, C=C_range)
     grid = GridSearchCV(svm.SVC(kernel="rbf"), param_grid=param_grid, cv=5)
     grid.fit(x_train, y_train)
@@ -86,7 +86,7 @@ def Tune_SVM_Parameters(x_train, y_train):
           % (grid.best_params_, grid.best_score_))
 
 def Tune_XGBoost_Parameters(x_train, y_train):
-    LR_range = [0.001, 0.01, 0.1, 1, 10, 100]
+    LR_range = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
     estimators_range = [100, 1000, 2000, 3000]
     param_grid = dict(n_estimators=estimators_range, learning_rate=LR_range)
     grid = GridSearchCV(GradientBoostingClassifier(), param_grid=param_grid, cv=5)
@@ -95,20 +95,56 @@ def Tune_XGBoost_Parameters(x_train, y_train):
     print("The best parameters are %s with a score of %0.2f"
           % (grid.best_params_, grid.best_score_))
 
+def Tune_SGDC_Parameters(x_train, y_train):
+    alpha_range = [0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000]
+    param_grid = dict(alpha=alpha_range)
+    grid = GridSearchCV(SGDClassifier(), param_grid=param_grid, cv=5)
+    grid.fit(x_train, y_train)
 
+    print("The best parameters are %s with a score of %0.2f"
+          % (grid.best_params_, grid.best_score_))
+
+def Tune_KNN_Parameters(x_train, y_train):
+    alpha_range = [3,5,7,9,11,13,15,17,19,21]
+    param_grid = dict(n_neighbors=alpha_range)
+    grid = GridSearchCV(KNeighborsClassifier(), param_grid=param_grid, cv=5)
+    grid.fit(x_train, y_train)
+
+    print("The best parameters are %s with a score of %0.2f"
+          % (grid.best_params_, grid.best_score_))
+
+def Tune_RandomForest_Parameters(x_train, y_train):
+    alpha_range = [10,50,100,200,1000]
+    estimator_range= [10,100,1000,2000]
+    param_grid = dict(max_depth=alpha_range, n_estimators=estimator_range)
+    grid = GridSearchCV(RandomForestClassifier(), param_grid=param_grid, cv=5)
+    grid.fit(x_train, y_train)
+
+    print("The best parameters are %s with a score of %0.2f"
+          % (grid.best_params_, grid.best_score_))
+
+def Tune_DecisionTree_Parameters(x_train, y_train):
+    alpha_range = [10,50,100,200,1000]
+    leaf_range= [10,100,1000,2000]
+    param_grid = dict(max_depth=alpha_range, max_leaf_nodes=leaf_range)
+    grid = GridSearchCV(tree.DecisionTreeClassifier(), param_grid=param_grid, cv=5)
+    grid.fit(x_train, y_train)
+
+    print("The best parameters are %s with a score of %0.2f"
+          % (grid.best_params_, grid.best_score_))
 
 def Learning_Curve(clf, x_train, y_train, clfName):
-    train_sizes, train_scores, valid_scores = learning_curve(clf, x_train, y_train, train_sizes=[500, 1000, 1494], scoring="accuracy")
+    train_sizes, train_scores, valid_scores = learning_curve(clf, x_train, y_train, train_sizes=[500, 1000, 1494], scoring="accuracy", cv=10)
     plt.title("Learning Curve - " + clfName)
-    plt.plot(train_sizes, train_scores, label="Training Score")
-    plt.plot(train_sizes, valid_scores, label="Cross Validation Score", linewidth=2.0, linestyle='dashed')
+    plt.plot(train_sizes, np.mean(train_scores, axis=1), label="Training Score")
+    plt.plot(train_sizes, np.mean(valid_scores, axis=1), label="Cross Validation Score", linewidth=2.0, linestyle='dashed')
     plt.xlabel("Data Size")
     plt.ylabel("Score")
     plt.legend()
     plt.show()
 
 def Validation_Curve(x_train, y_train):
-    train_scores, valid_scores = validation_curve(svm.SVC(), x_train, y_train, param_name="C", param_range=np.logspace(-6, 2, 5), cv=5, scoring="accuracy", n_jobs=1)
+    train_scores, valid_scores = validation_curve(svm.SVC(kernel='rbf'), x_train, y_train, param_name="C", param_range=np.logspace(-6, 2, 5), cv=5, scoring="accuracy", n_jobs=1)
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(valid_scores, axis=1)
@@ -189,15 +225,15 @@ def F1_Score(y_test, y_score):
     score= metrics.f1_score(y_test, y_score)
     print("F1 Score --->", score * 100)
 
-
 def Compare_Classifiers(X, y):
     models = []
     #models.append(('LR', LogisticRegression(C=0.01, max_iter=1000)))
-    models.append(('KNN', KNeighborsClassifier(n_neighbors=31)))
-    models.append(('Decision Tree', tree.DecisionTreeClassifier(max_depth=1000, max_leaf_nodes=10)))
+    models.append(('KNN', KNeighborsClassifier(n_neighbors=7)))
+    models.append(('Decision Tree', tree.DecisionTreeClassifier(max_depth=10, max_leaf_nodes=50)))
     models.append(('Random Forest', RandomForestClassifier(max_depth=100, n_estimators=100)))
-    models.append(('SVM-Rbf', svm.SVC(kernel="rbf", gamma=1, C=1)))
-    models.append(('SVM-Linear', svm.SVC(kernel="linear", C=0.1, max_iter=1000)))
+    models.append(('SVM-Rbf', svm.SVC(kernel="rbf", gamma=0.01, C=100)))
+    models.append(('SVM-Linear', svm.SVC(kernel="linear", C=1)))
+    models.append(('XGBoost', GradientBoostingClassifier(learning_rate=0.01, n_estimators=2000)))
     # evaluate each model in turn
     results = []
     names = []
@@ -210,7 +246,7 @@ def Compare_Classifiers(X, y):
         print(msg)
     # boxplot algorithm comparison
     fig = plt.figure()
-    fig.suptitle('Classifiers Comparison')
+    fig.suptitle('Classifiers Comparison (CV Scores)')
     ax = fig.add_subplot(111)
     plt.boxplot(results)
     ax.set_xticklabels(names)

@@ -16,6 +16,7 @@ import classification
 import evaluation
 from sklearn import svm, tree
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
 
 def processData():
@@ -208,36 +209,54 @@ def predict():
     oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = Clf_Split_Data()
 
     #---Use Model---#
-    #testPredictions = classification.Clf_SVM(oneHotDataTrain, oneHotDataTest, labelsTrain, "rbf")
-    testPredictions = classification.Clf_XGBoost(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_SVM(oneHotDataTrain, oneHotDataTest, labelsTrain, "linear")
+    #testPredictions = classification.Clf_XGBoost(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_DecisionTree(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_SGDC(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_LogisticRegression(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_RandomForest(oneHotDataTrain, oneHotDataTest, labelsTrain)
 
     #---Report---#
-    evaluation.Clf_Report(labelsTest, testPredictions, "XGBoost")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "XGBoost")
     #evaluation.Clf_Report(labelsTest, testPredictions, "DecisionTree")
     #evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "SGDC")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "KNN")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "Logistic Regression")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "Random Forest")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "Decision Tree")
 
-    evaluation.Clf_TPFP(labelsTest, testPredictions)
+    #evaluation.Clf_TPFP(labelsTest, testPredictions)
     #evaluation.Clf_CompareLabels(labelsTest, testPredictions)
 
 
+    #---Tune Parameters---#
+    #evaluation.Tune_SVM_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_XGBoost_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_SGDC_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_KNN_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_RandomForest_Parameters(oneHotDataTrain, labelsTrain)
+    #evaluation.Tune_DecisionTree_Parameters(oneHotDataTrain, labelsTrain)
+
+
     #---Validation---#
-    #evaluation.Learning_Curve(svm.SVC(kernel="rbf", gamma=0.1, C=1), oneHotDataTrain, labelsTrain, "SVM")
-    #evaluation.Learning_Curve(tree.DecisionTreeClassifier(max_depth=1000), oneHotDataTrain, labelsTrain, 'Decision Tree')
+    #evaluation.Learning_Curve(svm.SVC(kernel="rbf", gamma=0.01, C=100), oneHotDataTrain, labelsTrain, "SVM-Rbf")
+    #evaluation.Learning_Curve(svm.SVC(kernel="linear", C=1), oneHotDataTrain, labelsTrain, "SVM-Linear")
+    #evaluation.Learning_Curve(tree.DecisionTreeClassifier(max_depth=10, max_leaf_nodes=50), oneHotDataTrain, labelsTrain, 'Decision Tree')
+    #evaluation.Learning_Curve(RandomForestClassifier(max_depth=100, n_estimators=100), oneHotDataTrain,labelsTrain, 'Random Forest')
+    #evaluation.Learning_Curve(GradientBoostingClassifier(learning_rate=0.01, n_estimators=2000), oneHotDataTrain, labelsTrain,'XGBoost')
+    #evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=7), oneHotDataTrain, labelsTrain, 'KNN')
+
     #evaluation.Validation_Curve(oneHotDataTrain, labelsTrain)
 
     #evaluation.KNN_Validation(oneHotDataTrain, labelsTrain)
-    #evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=31), oneHotDataTrain, labelsTrain, 'KNN')
-
+    # evaluation.Precision_Recall_Curve(labelsTest, testPredictions)
 
     print("\n------- METRICS -------")
-    evaluation.AUC_Score(labelsTest, testPredictions)
-    evaluation.Average_Precision_Score(labelsTest, testPredictions)
-    evaluation.F1_Score(labelsTest, testPredictions)
-    #evaluation.Precision_Recall_Curve(labelsTest, testPredictions)
-    #evaluation.Tune_SVM_Parameters(oneHotDataTrain, labelsTrain)
-    #evaluation.Tune_XGBoost_Parameters(oneHotDataTrain, labelsTrain)
+    # evaluation.AUC_Score(labelsTest, testPredictions)
+    # evaluation.Average_Precision_Score(labelsTest, testPredictions)
+    # evaluation.F1_Score(labelsTest, testPredictions)
     evaluation.Compare_Classifiers(oneHotDataTrain, labelsTrain)
 
 

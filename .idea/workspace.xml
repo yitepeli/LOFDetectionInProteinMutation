@@ -2,6 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7475e2eb-e84b-4d9d-bc76-80c0f473c201" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Reports/DecisionTree-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/DecisionTree-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/GaussianNB.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/KNN-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/KNN-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/LogisticRegression-DefaultJPG.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/LogisticRegression-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/RandomForest-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/RandomForest-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SGDC-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SGDC-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SVM-Linear-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SVM-Linear-Parameter.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SVM-RBF-Default.JPG" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Reports/SVM-RBF-Parameter.JPG" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/classification.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evalData.py" beforeDir="false" afterPath="$PROJECT_DIR$/evalData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation.py" afterDir="false" />
@@ -16,24 +31,24 @@
     <session id="1715604099">
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="py" value="13" />
+          <entry key="py" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="Python" value="13" />
+          <entry key="Python" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="3254" />
+          <entry key="py" value="4181" />
           <entry key="txt" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="3254" />
+          <entry key="Python" value="4181" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
@@ -51,8 +66,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evalData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="653">
-              <caret line="187" column="37" lean-forward="true" selection-start-line="187" selection-start-column="37" selection-end-line="187" selection-end-column="37" />
+            <state relative-caret-position="191">
+              <caret line="188" column="23" lean-forward="true" selection-start-line="188" selection-start-column="23" selection-end-line="188" selection-end-column="23" />
               <folding>
                 <element signature="e#111#121#0" expanded="true" />
               </folding>
@@ -63,8 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="97">
-              <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="64" />
+            <state relative-caret-position="136">
+              <caret line="8" column="10" lean-forward="true" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="65" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -75,45 +90,22 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="755">
-              <caret line="191" selection-start-line="191" selection-end-line="191" />
+            <state relative-caret-position="704">
+              <caret line="248" column="51" selection-start-line="248" selection-start-column="51" selection-end-line="248" selection-end-column="51" />
               <folding>
                 <element signature="e#0#65#0" expanded="true" />
-                <element signature="e#977#1246#0" />
-                <element signature="e#2421#2571#0" />
-                <element signature="e#3013#3481#0" />
-                <element signature="e#3556#4743#0" />
-                <element signature="e#4763#5536#0" />
-                <element signature="e#5605#5756#0" />
-                <element signature="e#5824#5894#0" />
-                <element signature="e#6054#6741#0" />
-                <element signature="e#6779#6859#0" />
-                <element signature="e#7320#8254#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://O:/SABANCI_UNIVERSITY/Data Mining/Cyberbullying_Project/cyberbullying.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1271">
-              <caret line="31" selection-start-line="31" selection-end-line="31" />
-              <folding>
-                <element signature="e#0#18#0" expanded="true" />
-                <element signature="e#1241#1525#0" />
-                <element signature="e#1578#1807#0" />
-                <element signature="e#1849#2025#0" />
-                <element signature="e#2078#2351#0" />
-                <element signature="e#2408#2510#0" />
-                <element signature="e#2562#2664#0" />
-                <element signature="e#2717#2822#0" />
-                <element signature="e#2868#3019#0" />
-                <element signature="e#3064#3216#0" />
-                <element signature="e#3276#3430#0" />
-                <element signature="e#3487#3821#0" />
-                <element signature="e#3875#4032#0" />
-                <element signature="e#4086#4232#0" />
+                <element signature="e#2532#2682#0" />
+                <element signature="e#2733#3084#0" />
+                <element signature="e#3137#3529#0" />
+                <element signature="e#3632#3994#0" />
+                <element signature="e#4004#4317#0" />
+                <element signature="e#4362#4706#0" />
+                <element signature="e#4793#5165#0" />
+                <element signature="e#4065#5252#0" />
+                <element signature="e#6110#6242#0" />
+                <element signature="e#6295#6423#0" />
+                <element signature="e#6474#7161#0" />
+                <element signature="e#7198#7278#0" />
               </folding>
             </state>
           </provider>
@@ -137,8 +129,8 @@
         <option value="$PROJECT_DIR$/blossomProcessor.py" />
         <option value="O:/SABANCI_UNIVERSITY/Data Mining/Cyberbullying_Project/cyberbullying.py" />
         <option value="$PROJECT_DIR$/classification.py" />
-        <option value="$PROJECT_DIR$/evalData.py" />
         <option value="$PROJECT_DIR$/evaluation.py" />
+        <option value="$PROJECT_DIR$/evalData.py" />
       </list>
     </option>
   </component>
@@ -300,9 +292,9 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.evalData" />
-        <item itemvalue="Python.cyberbullying" />
         <item itemvalue="Python.evaluation" />
         <item itemvalue="Python.classification" />
+        <item itemvalue="Python.cyberbullying" />
         <item itemvalue="Python.blossomProcessor" />
       </list>
     </recent_temporary>
@@ -332,12 +324,12 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24973656" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1548999" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.39154014" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.5195228" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -413,40 +405,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/evaluation.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="755">
-          <caret line="191" selection-start-line="191" selection-end-line="191" />
-          <folding>
-            <element signature="e#0#65#0" expanded="true" />
-            <element signature="e#977#1246#0" />
-            <element signature="e#2421#2571#0" />
-            <element signature="e#3013#3481#0" />
-            <element signature="e#3556#4743#0" />
-            <element signature="e#4763#5536#0" />
-            <element signature="e#5605#5756#0" />
-            <element signature="e#5824#5894#0" />
-            <element signature="e#6054#6741#0" />
-            <element signature="e#6779#6859#0" />
-            <element signature="e#7320#8254#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="97">
-          <caret line="8" column="33" selection-start-line="8" selection-start-column="33" selection-end-line="8" selection-end-column="64" />
+        <state relative-caret-position="136">
+          <caret line="8" column="10" lean-forward="true" selection-start-line="8" selection-start-column="10" selection-end-line="8" selection-end-column="65" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/evaluation.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="704">
+          <caret line="248" column="51" selection-start-line="248" selection-start-column="51" selection-end-line="248" selection-end-column="51" />
+          <folding>
+            <element signature="e#0#65#0" expanded="true" />
+            <element signature="e#2532#2682#0" />
+            <element signature="e#2733#3084#0" />
+            <element signature="e#3137#3529#0" />
+            <element signature="e#3632#3994#0" />
+            <element signature="e#4004#4317#0" />
+            <element signature="e#4362#4706#0" />
+            <element signature="e#4793#5165#0" />
+            <element signature="e#4065#5252#0" />
+            <element signature="e#6110#6242#0" />
+            <element signature="e#6295#6423#0" />
+            <element signature="e#6474#7161#0" />
+            <element signature="e#7198#7278#0" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/evalData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="653">
-          <caret line="187" column="37" lean-forward="true" selection-start-line="187" selection-start-column="37" selection-end-line="187" selection-end-column="37" />
+        <state relative-caret-position="191">
+          <caret line="188" column="23" lean-forward="true" selection-start-line="188" selection-start-column="23" selection-end-line="188" selection-end-column="23" />
           <folding>
             <element signature="e#111#121#0" expanded="true" />
           </folding>
