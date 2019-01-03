@@ -197,6 +197,8 @@ def Clf_Split_Data():
     oneHotData = np.delete(oneHotData, 0, 1)
     oneHotData = np.delete(oneHotData, 0, 1)
 
+    oneHotData = oneHotData.astype(float)
+
     #data split operation based on stratified labels. %90 train %10 test (rate could be changeable)
     oneHotDataTrain, oneHotDataTest, labelsTrain, labelsTest = train_test_split(oneHotData, labels, stratify=labels, test_size=0.1)
 
@@ -214,7 +216,7 @@ def predict():
     #testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_DecisionTree(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_SGDC(oneHotDataTrain, oneHotDataTest, labelsTrain)
-    #testPredictions = classification.Clf_LogisticRegression(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    testPredictions = classification.Clf_LogisticRegression(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_RandomForest(oneHotDataTrain, oneHotDataTest, labelsTrain)
 
     #---Report---#
@@ -223,7 +225,7 @@ def predict():
     #evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
     #evaluation.Clf_Report(labelsTest, testPredictions, "SGDC")
     #evaluation.Clf_Report(labelsTest, testPredictions, "KNN")
-    #evaluation.Clf_Report(labelsTest, testPredictions, "Logistic Regression")
+    evaluation.Clf_Report(labelsTest, testPredictions, "Logistic Regression")
     #evaluation.Clf_Report(labelsTest, testPredictions, "Random Forest")
     #evaluation.Clf_Report(labelsTest, testPredictions, "Decision Tree")
 
