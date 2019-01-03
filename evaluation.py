@@ -227,13 +227,14 @@ def F1_Score(y_test, y_score):
 
 def Compare_Classifiers(X, y):
     models = []
-    #models.append(('LR', LogisticRegression(C=0.01, max_iter=1000)))
+    models.append(('LR', LogisticRegression(C=1, max_iter=1000)))
     models.append(('KNN', KNeighborsClassifier(n_neighbors=7)))
     models.append(('Decision Tree', tree.DecisionTreeClassifier(max_depth=10, max_leaf_nodes=50)))
     models.append(('Random Forest', RandomForestClassifier(max_depth=100, n_estimators=100)))
     models.append(('SVM-Rbf', svm.SVC(kernel="rbf", gamma=0.01, C=100)))
     models.append(('SVM-Linear', svm.SVC(kernel="linear", C=1)))
     models.append(('XGBoost', GradientBoostingClassifier(learning_rate=0.01, n_estimators=2000)))
+    models.append(('SGDC', SGDClassifier(alpha=0.001, max_iter=1000)))
     # evaluate each model in turn
     results = []
     names = []

@@ -15,6 +15,7 @@ import blossomProcessor as bloPro
 import classification
 import evaluation
 from sklearn import svm, tree
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
 
@@ -216,7 +217,7 @@ def predict():
     #testPredictions = classification.Clf_KNN(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_DecisionTree(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_SGDC(oneHotDataTrain, oneHotDataTest, labelsTrain)
-    testPredictions = classification.Clf_LogisticRegression(oneHotDataTrain, oneHotDataTest, labelsTrain)
+    #testPredictions = classification.Clf_LogisticRegression(oneHotDataTrain, oneHotDataTest, labelsTrain)
     #testPredictions = classification.Clf_RandomForest(oneHotDataTrain, oneHotDataTest, labelsTrain)
 
     #---Report---#
@@ -225,7 +226,7 @@ def predict():
     #evaluation.Clf_Report(labelsTest, testPredictions, "SVM with RBF Kernel")
     #evaluation.Clf_Report(labelsTest, testPredictions, "SGDC")
     #evaluation.Clf_Report(labelsTest, testPredictions, "KNN")
-    evaluation.Clf_Report(labelsTest, testPredictions, "Logistic Regression")
+    #evaluation.Clf_Report(labelsTest, testPredictions, "Logistic Regression")
     #evaluation.Clf_Report(labelsTest, testPredictions, "Random Forest")
     #evaluation.Clf_Report(labelsTest, testPredictions, "Decision Tree")
 
@@ -249,6 +250,8 @@ def predict():
     #evaluation.Learning_Curve(RandomForestClassifier(max_depth=100, n_estimators=100), oneHotDataTrain,labelsTrain, 'Random Forest')
     #evaluation.Learning_Curve(GradientBoostingClassifier(learning_rate=0.01, n_estimators=2000), oneHotDataTrain, labelsTrain,'XGBoost')
     #evaluation.Learning_Curve(KNeighborsClassifier(n_neighbors=7), oneHotDataTrain, labelsTrain, 'KNN')
+    #evaluation.Learning_Curve(SGDClassifier(alpha=0.001, max_iter=1000), oneHotDataTrain, labelsTrain, 'SGDC')
+    #evaluation.Learning_Curve(LogisticRegression(C=1, max_iter=1000), oneHotDataTrain, labelsTrain, 'Logistic Regression')
 
     #evaluation.Validation_Curve(oneHotDataTrain, labelsTrain)
 

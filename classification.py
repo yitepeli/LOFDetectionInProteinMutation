@@ -18,7 +18,7 @@ def Clf_DecisionTree(x_train, x_test, y_train):
     return y_preds
 
 def Clf_LogisticRegression(x_train, x_test, y_train):
-    clf = LogisticRegression(C=0.01, max_iter=1000)
+    clf = LogisticRegression(C=1, max_iter=1000)
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
@@ -34,7 +34,7 @@ def Clf_SVM(x_train, x_test, y_train, kernelType):
     return y_preds
 
 def Clf_SGDC(x_train, x_test, y_train):
-    clf = SGDClassifier(alpha=0.0001)
+    clf = SGDClassifier(alpha=0.001, max_iter=1000)
     clf.fit(x_train, y_train)
     y_preds = clf.predict(x_test)
     return y_preds
