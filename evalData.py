@@ -256,13 +256,18 @@ def predict():
     #evaluation.Validation_Curve(oneHotDataTrain, labelsTrain)
 
     #evaluation.KNN_Validation(oneHotDataTrain, labelsTrain)
+    #evaluation.SVM_Validation(oneHotDataTrain, labelsTrain, 'rbf', 'C')
+    #evaluation.XGBoost_Validation(oneHotDataTrain, labelsTrain)
+    #evaluation.SGDC_Validation(oneHotDataTrain, labelsTrain)
+    #evaluation.LogisticRegression_Validation(oneHotDataTrain, labelsTrain)
+    evaluation.DecisionTree_Validation(oneHotDataTrain, labelsTrain)
     # evaluation.Precision_Recall_Curve(labelsTest, testPredictions)
 
     print("\n------- METRICS -------")
     # evaluation.AUC_Score(labelsTest, testPredictions)
     # evaluation.Average_Precision_Score(labelsTest, testPredictions)
     # evaluation.F1_Score(labelsTest, testPredictions)
-    evaluation.Compare_Classifiers(oneHotDataTrain, labelsTrain)
+    #evaluation.Compare_Classifiers(oneHotDataTrain, labelsTrain)
 
 
 def main():

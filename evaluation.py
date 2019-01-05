@@ -8,6 +8,7 @@ from sklearn import svm, tree
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 import numpy as np
+import math
 import matplotlib.pyplot as plt
 from sklearn.model_selection import validation_curve
 from sklearn.model_selection import cross_val_score
@@ -190,6 +191,116 @@ def KNN_Validation(x_train, y_train):
     plt.ylabel("Average Score of Cross Validation")
     plt.plot(neighborValues, averageCV)
     plt.show()
+
+
+def SVM_Validation(x_train, y_train, kernel, parameter):
+    neighborValues = []
+    averageCV = []
+    plt.title("SVM " + kernel + " kernel Cross-Validation Scores with different " + str(parameter) + " values")
+
+    paramValue = math.pow(10, -4)
+    for i in range(0, 8):
+        print(paramValue)
+        if parameter == 'Gamma':
+            clf = svm.SVC(kernel=kernel, gamma=paramValue)
+        elif parameter == 'C':
+            clf = svm.SVC(kernel=kernel, C=paramValue)
+        scores = cross_val_score(clf, x_train, y_train, cv=5)
+        averageCV.append(sum(scores) / len(scores))
+        neighborValues.append(paramValue)
+        paramValue = paramValue * 10
+
+
+    plt.xlabel(parameter)
+    plt.ylabel("Average Score of Cross Validation")
+    plt.semilogx(neighborValues, averageCV)
+    plt.show()
+
+
+
+def XGBoost_Validation(x_train, y_train):
+    neighborValues = []
+    averageCV = []
+    plt.title("XGBoost Cross-Validation Scores with different alpha values")
+
+    paramValue = math.pow(10, -4)
+    for i in range(0, 8):
+        print(paramValue)
+        clf = GradientBoostingClassifier(learning_rate=paramValue, n_estimators=2000)
+        scores = cross_val_score(clf, x_train, y_train, cv=5)
+        averageCV.append(sum(scores) / len(scores))
+        neighborValues.append(paramValue)
+        paramValue = paramValue * 10
+
+
+    plt.xlabel("Alpha")
+    plt.ylabel("Average Score of Cross Validation")
+    plt.semilogx(neighborValues, averageCV)
+    plt.show()
+
+
+def SGDC_Validation(x_train, y_train):
+    neighborValues = []
+    averageCV = []
+    plt.title("SGDC Cross-Validation Scores with different alpha values")
+
+    paramValue = math.pow(10, -4)
+    for i in range(0, 8):
+        print(paramValue)
+        clf = SGDClassifier(alpha=paramValue, max_iter=1000)
+        scores = cross_val_score(clf, x_train, y_train, cv=5)
+        averageCV.append(sum(scores) / len(scores))
+        neighborValues.append(paramValue)
+        paramValue = paramValue * 10
+
+
+    plt.xlabel("Alpha")
+    plt.ylabel("Average Score of Cross Validation")
+    plt.semilogx(neighborValues, averageCV)
+    plt.show()
+
+
+def LogisticRegression_Validation(x_train, y_train):
+    neighborValues = []
+    averageCV = []
+    plt.title("Logistic Regression Cross-Validation Scores with different C values")
+
+    paramValue = math.pow(10, -4)
+    for i in range(0, 8):
+        print(paramValue)
+        clf = LogisticRegression(C=paramValue, max_iter=2000)
+        scores = cross_val_score(clf, x_train, y_train, cv=5)
+        averageCV.append(sum(scores) / len(scores))
+        neighborValues.append(paramValue)
+        paramValue = paramValue * 10
+
+
+    plt.xlabel("C")
+    plt.ylabel("Average Score of Cross Validation")
+    plt.semilogx(neighborValues, averageCV)
+    plt.show()
+
+
+
+def DecisionTree_Validation(x_train, y_train):
+    neighborValues = []
+    averageCV = []
+    plt.title("Decision Tree Cross-Validation Scores with different max_depth values")
+
+    paramValue = [10,50,100,200,1000]
+    for i in range(0, 5):
+        print(paramValue[i])
+        clf = tree.DecisionTreeClassifier(max_depth=paramValue[i], max_leaf_nodes=50)
+        scores = cross_val_score(clf, x_train, y_train, cv=5)
+        averageCV.append(sum(scores) / len(scores))
+        neighborValues.append(paramValue[i])
+
+    plt.xlabel("max_depth")
+    plt.ylabel("Average Score of Cross Validation")
+    plt.semilogx(neighborValues, averageCV)
+    plt.show()
+
+
 
 
 

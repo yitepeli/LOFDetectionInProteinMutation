@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7475e2eb-e84b-4d9d-bc76-80c0f473c201" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Reports/classifier-comparison.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Reports/results.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/Reports/results.xlsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classification.py" beforeDir="false" afterPath="$PROJECT_DIR$/classification.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evalData.py" beforeDir="false" afterPath="$PROJECT_DIR$/evalData.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/evaluation.py" afterDir="false" />
     </list>
@@ -28,22 +26,23 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="py" value="4268" />
+          <entry key="py" value="4847" />
           <entry key="txt" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="PLAIN_TEXT" value="18" />
-          <entry key="Python" value="4268" />
+          <entry key="Python" value="4847" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
+          <entry key="project.closed" value="3" />
+          <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.3" value="2" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
     </session>
@@ -53,8 +52,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/evalData.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="551">
-              <caret line="260" column="38" lean-forward="true" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
+            <state relative-caret-position="494">
+              <caret line="262" column="41" selection-start-line="262" selection-start-column="41" selection-end-line="262" selection-end-column="42" />
               <folding>
                 <element signature="e#111#121#0" expanded="true" />
               </folding>
@@ -65,8 +64,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classification.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="342">
-              <caret line="36" column="10" lean-forward="true" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="51" />
+            <state relative-caret-position="612">
+              <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
               <folding>
                 <element signature="e#0#32#0" expanded="true" />
               </folding>
@@ -77,11 +76,16 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/evaluation.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="332">
-              <caret line="236" column="70" lean-forward="true" selection-start-line="236" selection-start-column="70" selection-end-line="236" selection-end-column="70" />
+            <state relative-caret-position="481">
+              <caret line="298" column="51" lean-forward="true" selection-start-line="298" selection-start-column="51" selection-end-line="298" selection-end-column="51" />
               <folding>
                 <element signature="e#0#65#0" expanded="true" />
                 <element signature="e#2532#2682#0" />
+                <element signature="e#6977#7750#0" />
+                <element signature="e#7826#8515#0" />
+                <element signature="e#8623#9208#0" />
+                <element signature="e#9290#9908#0" />
+                <element signature="e#9923#10513#0" />
               </folding>
             </state>
           </provider>
@@ -104,15 +108,15 @@
       <list>
         <option value="$PROJECT_DIR$/blossomProcessor.py" />
         <option value="O:/SABANCI_UNIVERSITY/Data Mining/Cyberbullying_Project/cyberbullying.py" />
-        <option value="$PROJECT_DIR$/evalData.py" />
         <option value="$PROJECT_DIR$/classification.py" />
         <option value="$PROJECT_DIR$/evaluation.py" />
+        <option value="$PROJECT_DIR$/evalData.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="61" />
-    <option name="y" value="202" />
+    <option name="x" value="2105" />
+    <option name="y" value="120" />
     <option name="width" value="1440" />
     <option name="height" value="780" />
   </component>
@@ -297,7 +301,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="1912" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1548999" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -366,8 +370,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/classification.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="342">
-          <caret line="36" column="10" lean-forward="true" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="51" />
+        <state relative-caret-position="612">
+          <caret line="36" column="51" selection-start-line="36" selection-start-column="51" selection-end-line="36" selection-end-column="51" />
           <folding>
             <element signature="e#0#32#0" expanded="true" />
           </folding>
@@ -376,19 +380,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/evaluation.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="332">
-          <caret line="236" column="70" lean-forward="true" selection-start-line="236" selection-start-column="70" selection-end-line="236" selection-end-column="70" />
+        <state relative-caret-position="481">
+          <caret line="298" column="51" lean-forward="true" selection-start-line="298" selection-start-column="51" selection-end-line="298" selection-end-column="51" />
           <folding>
             <element signature="e#0#65#0" expanded="true" />
             <element signature="e#2532#2682#0" />
+            <element signature="e#6977#7750#0" />
+            <element signature="e#7826#8515#0" />
+            <element signature="e#8623#9208#0" />
+            <element signature="e#9290#9908#0" />
+            <element signature="e#9923#10513#0" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/evalData.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="551">
-          <caret line="260" column="38" lean-forward="true" selection-start-line="260" selection-start-column="38" selection-end-line="260" selection-end-column="38" />
+        <state relative-caret-position="494">
+          <caret line="262" column="41" selection-start-line="262" selection-start-column="41" selection-end-line="262" selection-end-column="42" />
           <folding>
             <element signature="e#111#121#0" expanded="true" />
           </folding>
